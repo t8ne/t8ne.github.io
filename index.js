@@ -89,8 +89,8 @@ class T8neElement extends LitElement {
     .side-menu {
       position: fixed;
       top: 0;
-      left: -800px;
-      width: 700px;
+      left: -60%;
+      width: 50%;
       height: 100vh;
       background-color: #080808;
       transition: left 0.3s;
@@ -112,7 +112,8 @@ class T8neElement extends LitElement {
       text-decoration: none;
       font-size: 1.4rem;
       display: block;
-      margin: 7%;
+      margin-top: 7%;
+      margin-bottom: 7%;
       text-align: center;
     }
     .overlay {
