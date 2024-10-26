@@ -172,7 +172,7 @@ class T8neElement extends LitElement {
       </div>
       <div class="dynamic-text">${this.currentPhrase}</div>
       <footer>
-        <a class="app-icon" href="http://github.com/t8ne" target="_blank"><img src="assets/footer/github.png" alt="GitHub" width="20" height="20"></a>
+        <a class="app-icon" href="http://github.com/t8ne" target="_blank"><img src="assets/footer/github (1).png" alt="GitHub" width="20" height="20"></a>
         <a class="app-icon" href="http://linkedin.com/in/t8ne/" target="_blank"><img src="assets/footer/linkedin.png" alt="LinkedIn" width="20" height="20"></a>
         <a class="app-icon" href="https://open.spotify.com/user/aantryy" target="_blank"><img src="assets/footer/spotify.png" alt="Spotify" width="20" height="20"></a>
         <a class="app-icon" href="https://www.chess.com/member/t8ne" target="_blank"><img src="assets/footer/pawn.png" alt="Chess" width="20" height="20"></a>
