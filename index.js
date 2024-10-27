@@ -228,7 +228,7 @@ class T8neElement extends LitElement {
       case 'about':
         return html`
           <div class="about-content">
-            António is a 20-year-old third-year university student pursuing a Bachelor's degree in Graphic Computing and Multimedia. With a solid foundation in programming languages like Java and expertise in web development using HTML, CSS, and JavaScript, António is committed to harnessing technical and creative skills in projects that blend engineering precision with visual storytelling. Passionate about innovation in multimedia technology, António is keen on developing applications and websites that push the boundaries of user experience.
+            Tone is a 20-year-old third-year university student pursuing a Bachelor's degree in Graphic Computing and Multimedia. With a solid foundation in programming languages like Java and expertise in web development using HTML, CSS, and JavaScript, Tone is committed to harnessing technical and creative skills in projects that blend engineering precision with visual storytelling. Passionate about innovation in multimedia technology, Tone is keen on developing applications and websites that push the boundaries of user experience.
           </div>
         `;
       case 'skills':
