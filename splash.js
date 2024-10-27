@@ -51,7 +51,6 @@ class SplashElement extends LitElement {
     this.classList.add('fade-out');
     setTimeout(() => {
       this.remove();
-      // Dispatch a custom event when the splash screen is removed
       document.dispatchEvent(new CustomEvent('splashScreenRemoved'));
     }, 1000);
   }

@@ -2,24 +2,25 @@ import { html, css, LitElement } from 'https://cdn.skypack.dev/lit';
 
 class T8neElement extends LitElement {
   static properties = {
-    menuOpen: { type: Boolean },
-    currentPhrase: { type: String }
+    currentPhrase: { type: String },
+    activeSection: { type: String },
+    isTransitioning: { type: Boolean }
   };
 
   constructor() {
     super();
-    this.phrases = ["Hi, I'm t8ne", "Web Developer", "Music Enthusiast", "Creative Coder"];
+    this.phrases = ["Hi, I'm t8ne", "Web Developer", "Music Enthusiast", "Calisthenics Enjoyer"];
     this.currentPhrase = "";
     this.isDeleting = false;
     this.index = 0;
-    this.speed = 200;
-    this.menuOpen = false;
+    this.speed = 100;
     this.typingStarted = false;
+    this.activeSection = 'home';
+    this.isTransitioning = false;
   }
 
   connectedCallback() {
     super.connectedCallback();
-    // Listen for the custom event from the splash screen
     document.addEventListener('splashScreenRemoved', () => {
       this.startTyping();
     });
@@ -31,24 +32,72 @@ class T8neElement extends LitElement {
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      height: 100vh;
-      width: 100vw;
+      min-height: 100vh;
+      width: 100%;
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      overflow-x: hidden;
       background-color: black;
       color: white;
       font-family: 'Arial Black', Arial, sans-serif;
-    
     }
-    .dynamic-text {
-      font-size: 3em;
+    header {
+      width: 100%;
+      background-color: black;
+      padding: 1em;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+      padding: 0.5em;
+    }
+    nav a:hover {
+      color: #cccccc;
+    }
+    .content {
+      font-size: 2em;
       font-weight: bold;
       text-align: center;
       flex-grow: 1;
       display: flex;
       justify-content: center;
       align-items: center;
+      transition: opacity 0.5s ease-in-out;
+      padding: 1em;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow-y: auto;
+    }
+    @media (max-width: 768px) {
+      .content {
+        font-size: 1.5em;
+        padding: 0.5em;
+      }
+    }
+    .content.transitioning {
+      opacity: 0;
+    }
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background-color: white;
+      margin-left: 2px;
+      animation: blink 0.7s infinite;
+    }
+    @keyframes blink {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
     }
     footer {
       display: flex;
@@ -57,80 +106,72 @@ class T8neElement extends LitElement {
       background-color: black;
       padding: 1em;
       width: 100%;
+      flex-wrap: wrap;
     }
     .app-icon {
-      width: 30px;
-      height: 30px;
+      width: 20px;
+      height: 20px;
       margin: 0 10px;
       cursor: pointer;
       transition: transform 0.2s;
     }
-    .app-icon:hover {
-      transform: scale(1.1);
-    }
     .app-icon img {
       filter: invert(1);
+      width: 20px;
+      height: 20px;
     }
-    .menu-icon {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      cursor: pointer;
-      z-index: 992;
-      transition: opacity 0.3s;
+    .about-content {
+      font-size: 1rem;
+      max-width: 60%;
+      line-height: 1.6;
+      text-align: center;
+      margin: 5%;
     }
-    .menu-icon.hidden {
-      opacity: 0;
-      pointer-events: none;
+    .contact-content {
+      font-size: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
     }
-    .menu-icon img {
-        filter: invert(1);
-      }
-    .side-menu {
-      position: fixed;
-      top: 0;
-      left: -60%;
-      width: 50%;
-      height: 100vh;
-      background-color: #080808;
-      transition: left 0.3s;
-      padding: 2em;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-      z-index: 991;
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 1.5em;
+      justify-items: center;
+      align-items: start;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1em;
+      justify-content: center;
     }
-    .side-menu.open {
-      left: 0;
-    }
-    .close-menu {
-      cursor: pointer;
-      font-size: 1.5em;
-      margin-bottom: 20px;
-      color: white;
-    }
-    .menu-item {
-      color: white;
-      text-decoration: none;
-      font-size: 1.4rem;
-      display: block;
-      margin-top: 7%;
-      margin-bottom: 7%;
+    .skill-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
     }
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.5);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-      z-index: 990;
+    .skill-item img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 0.5em;
     }
-    .overlay.active {
-      opacity: 1;
-      pointer-events: auto;
+    .skill-name {
+      font-size: 0.7rem;
+    }
+    @media (max-width: 50%) {
+      .skills-grid {
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+        gap: 1em;
+      }
+      .skill-item img {
+        width: 30px;
+        height: 30px;
+      }
+      .skill-name {
+        font-size: 0.6rem;
+      }
     }
   `;
 
@@ -142,14 +183,16 @@ class T8neElement extends LitElement {
   }
 
   typing() {
+    if (this.activeSection !== 'home') return;
+
     const fullText = this.phrases[this.index % this.phrases.length];
 
     if (this.isDeleting) {
       this.currentPhrase = fullText.substring(0, this.currentPhrase.length - 1);
-      this.speed = 100;
+      this.speed = 50;
     } else {
       this.currentPhrase = fullText.substring(0, this.currentPhrase.length + 1);
-      this.speed = 200;
+      this.speed = 100;
     }
 
     if (!this.isDeleting && this.currentPhrase === fullText) {
@@ -165,34 +208,109 @@ class T8neElement extends LitElement {
     setTimeout(() => this.typing(), this.speed);
   }
 
+  changeSection(section) {
+    if (this.activeSection !== section) {
+      this.isTransitioning = true;
+      setTimeout(() => {
+        this.activeSection = section;
+        this.isTransitioning = false;
+        if (section === 'home') {
+          this.typing();
+        }
+      }, 500);
+    }
+  }
+
+  renderContent() {
+    switch (this.activeSection) {
+      case 'home':
+        return html`${this.currentPhrase}<span class="cursor"></span>`;
+      case 'about':
+        return html`
+          <div class="about-content">
+            António is a 20-year-old third-year university student pursuing a Bachelor's degree in Graphic Computing and Multimedia. With a solid foundation in programming languages like Java and expertise in web development using HTML, CSS, and JavaScript, António is committed to harnessing technical and creative skills in projects that blend engineering precision with visual storytelling. Passionate about innovation in multimedia technology, António is keen on developing applications and websites that push the boundaries of user experience.
+          </div>
+        `;
+      case 'skills':
+        return html`
+          <div class="skills-grid">
+            ${this.renderSkills()}
+          </div>
+        `;
+      case 'contact':
+        return html`
+          <div class="contact-content">
+            <div>Discord - @t8n3</div>
+            <div>t8n333@gmail.com</div>
+          </div>
+        `;
+      default:
+        return '';
+    }
+  }
+
+  renderSkills() {
+    const skills = [
+      { name: 'CSS3', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg' },
+      { name: 'HTML5', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg' },
+      { name: 'Bootstrap', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg' },
+      { name: 'JavaScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
+      { name: 'TypeScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
+      { name: 'C#', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg' },
+      { name: 'Java', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
+      { name: 'PHP', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg' },
+      { name: 'MySQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
+      { name: 'Ruby', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg' },
+      { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
+      { name: 'Node.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
+      { name: 'Angular', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg' },
+      { name: 'Firebase', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg' },
+      { name: 'PostgreSQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
+      { name: 'Docker', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
+      { name: 'Ionic', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ionic/ionic-original.svg' },
+      { name: 'After Effects', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/aftereffects/aftereffects-original.svg' },
+      { name: 'Illustrator', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg' },
+      { name: 'LaTeX', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/latex/latex-original.svg' },
+      { name: 'Photoshop', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg' },
+      { name: 'Premiere Pro', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/premierepro/premierepro-plain.svg' },
+      { name: 'Blender', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg' },
+      { name: 'VS Code', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg' },
+      { name: 'Android Studio', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/androidstudio/androidstudio-original.svg' },
+      { name: 'Figma', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg' },
+      { name: 'IntelliJ', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg' },
+      { name: 'Fedora', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fedora/fedora-original.svg' },
+      { name: 'Ruby on Rails', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rails/rails-original-wordmark.svg' },
+    ];
+
+    return skills.map(skill => html`
+      <div class="skill-item">
+        <img src="${skill.logo}" alt="${skill.name} logo" />
+        <span class="skill-name">${skill.name}</span>
+      </div>
+    `);
+  }
+
   render() {
     return html`
-      <div class="menu-icon ${this.menuOpen ? 'hidden' : ''}" @click="${this.toggleMenu}">
-        <img src="assets/menu/menu.png" alt="Menu" width="30" height="30">
+      <header>
+        <nav>
+          ${['Home', 'About', 'Skills', 'Contact'].map(item => html`
+            <a href="#" @click=${() => this.changeSection(item.toLowerCase())}>${item}</a>
+          `)}
+        </nav>
+      </header>
+      <div class="content ${this.isTransitioning ? 'transitioning' : ''}">
+        ${this.renderContent()}
       </div>
-      <div class="dynamic-text">${this.currentPhrase}</div>
       <footer>
-        <a class="app-icon" href="http://github.com/t8ne" target="_blank"><img src="assets/footer/github2.png" alt="GitHub" width="20" height="20"></a>
+        <a class="app-icon" href="http://github.com/t8ne" target="_blank"><img src="assets/footer/github.png" alt="GitHub" width="20" height="20"></a>
         <a class="app-icon" href="http://linkedin.com/in/t8ne/" target="_blank"><img src="assets/footer/linkedin.png" alt="LinkedIn" width="20" height="20"></a>
         <a class="app-icon" href="https://open.spotify.com/user/aantryy" target="_blank"><img src="assets/footer/spotify.png" alt="Spotify" width="20" height="20"></a>
         <a class="app-icon" href="https://www.chess.com/member/t8ne" target="_blank"><img src="assets/footer/pawn.png" alt="Chess" width="20" height="20"></a>
         <a class="app-icon" href="http://youtube.com/@t8n3" target="_blank"><img src="assets/footer/youtube.png" alt="YouTube" width="20" height="20"></a>
         <a class="app-icon" href="https://steamcommunity.com/id/t8ne" target="_blank"><img src="assets/footer/steam.png" alt="Steam" width="20" height="20"></a>
       </footer>
-      <div class="side-menu ${this.menuOpen ? 'open' : ''}">
-        <div class="close-menu" @click="${this.toggleMenu}">X</div>
-        <a href="#" class="menu-item" style="margin-top: 10%">Home</a>
-        <a href="#" class="menu-item">About</a>
-        <a href="#" class="menu-item">Projects</a>
-        <a href="#" class="menu-item">Contact</a>
-      </div>
-      <div class="overlay ${this.menuOpen ? 'active' : ''}" @click="${this.toggleMenu}"></div>
     `;
-  }
-
-  toggleMenu() {
-    this.menuOpen = !this.menuOpen;
-    this.requestUpdate();
   }
 }
 
