@@ -85,7 +85,7 @@ class T8neElement extends LitElement {
       margin-left: 0;
       margin-right: 0;
       box-sizing: border-box;
-      transform: translateX(-8px);
+      transform: translateX(-7px);
     }
     
     @media (max-width: 768px) {
