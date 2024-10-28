@@ -57,6 +57,7 @@ class T8neElement extends LitElement {
       justify-content: center;
       gap: 1em;
       flex-wrap: wrap;
+      font-family: 'Arial Black', Arial, sans-serif;
     }
     nav a {
       color: white;
@@ -85,7 +86,7 @@ class T8neElement extends LitElement {
       margin-left: 0;
       margin-right: 0;
       box-sizing: border-box;
-      transform: translateX(-7px);
+      transform: translateX(-5px);
     }
     
     @media (max-width: 768px) {
