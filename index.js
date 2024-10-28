@@ -17,6 +17,7 @@ class T8neElement extends LitElement {
     this.typingStarted = false;
     this.activeSection = 'home';
     this.isTransitioning = false;
+    this.isIdle = false;
   }
 
   connectedCallback() {
@@ -27,6 +28,11 @@ class T8neElement extends LitElement {
   }
 
   static styles = css`
+
+    body, .content {
+      overflow-x: hidden;
+    }
+
     :host {
       display: flex;
       flex-direction: column;
@@ -71,12 +77,17 @@ class T8neElement extends LitElement {
       justify-content: center;
       align-items: center;
       transition: opacity 0.5s ease-in-out;
-      padding: 1em;
+      padding: 0;
       width: 100%;
-      max-width: 1200px;
+      max-width: calc(100% - 15px);
       margin: 0 auto;
       overflow-y: auto;
+      margin-left: 0;
+      margin-right: 0;
+      box-sizing: border-box;
+      transform: translateX(-8px);
     }
+    
     @media (max-width: 768px) {
       .content {
         font-size: 1.5em;
@@ -94,6 +105,11 @@ class T8neElement extends LitElement {
       margin-left: 2px;
       animation: blink 0.7s infinite;
     }
+
+    .cursor-static {
+      animation: none;
+    }
+
     @keyframes blink {
       0% { opacity: 0; }
       50% { opacity: 1; }
@@ -184,29 +200,34 @@ class T8neElement extends LitElement {
 
   typing() {
     if (this.activeSection !== 'home') return;
-
+  
     const fullText = this.phrases[this.index % this.phrases.length];
-
+  
     if (this.isDeleting) {
       this.currentPhrase = fullText.substring(0, this.currentPhrase.length - 1);
       this.speed = 50;
+      this.isIdle = false;
     } else {
       this.currentPhrase = fullText.substring(0, this.currentPhrase.length + 1);
       this.speed = 100;
+      this.isIdle = false;
     }
-
+  
     if (!this.isDeleting && this.currentPhrase === fullText) {
       this.speed = 2000;
       this.isDeleting = true;
+      this.isIdle = true; // Só fica idle quando o texto está completo
     } else if (this.isDeleting && this.currentPhrase === "") {
       this.isDeleting = false;
       this.index++;
       this.speed = 500;
+      this.isIdle = false;
     }
-
+  
     this.requestUpdate();
     setTimeout(() => this.typing(), this.speed);
   }
+  
 
   changeSection(section) {
     if (this.activeSection !== section) {
@@ -224,7 +245,10 @@ class T8neElement extends LitElement {
   renderContent() {
     switch (this.activeSection) {
       case 'home':
-        return html`${this.currentPhrase}<span class="cursor"></span>`;
+        return html`
+          ${this.currentPhrase}
+          <span class="cursor ${this.isIdle ? '' : 'cursor-static'}"></span>
+        `;
       case 'about':
         return html`
           <div class="about-content">
