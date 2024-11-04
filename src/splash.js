@@ -43,7 +43,7 @@ class SplashElement extends LitElement {
 
   render() {
     return html`
-      <img src="../src/assets/signature/t8ne.png" alt="Splash Logo" @click=${this._handleClick}>
+      <img src="/assets/signature/t8ne.png" alt="Splash Logo" @click=${this._handleClick}>
     `;
   }
 
