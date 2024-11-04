@@ -37,7 +37,7 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "./dist" # This is where Webpack outputs the built files
+          path: "./src" # This is where Webpack outputs the built files
 
   deploy:
     environment:
