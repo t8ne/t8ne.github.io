@@ -6,7 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = {
   mode: 'production',
   entry: {
-    main: ['./src/index.min.js', './src/splash.min.js'],
+    main: ['./src/bundle.min.js'],
   },
   output: {
     filename: 'bundle.min.js',
