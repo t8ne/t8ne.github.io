@@ -34,4 +34,4 @@ The main component is defined in `index.js`, with the following code flow:
 1. Clone the repository:
    ```bash
    git clone https://github.com/t8ne/t8ne.github.io.git
-   cd t8ne-portfolio
+   cd t8ne.github.io
