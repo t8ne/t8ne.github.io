@@ -1,4 +1,4 @@
-// @author: t8ne
+//@author: t8ne
 //--------------------------------------------------------------------------------------------
 
 //Cena de Preload: Carregar previamente os assets
@@ -44,20 +44,29 @@ class PreloadScene extends Phaser.Scene {
     assetText.setOrigin(0.5, 0.5);
 
     //Estilo do texto e barra
-    this.load.on("progress", function (value) {
+    this.load.on("progress", (value) => {
       percentText.setText(parseInt(value * 100) + "%");
-      progressBar.clear();
-      progressBar.fillStyle(0xffffff, 1);
-      progressBar.fillRect(250, 280, 300 * value, 30);
+
+      //Dar apenas update quando for preciso
+      if (value > progressBar.previousValue) {
+        //Dar clear da barra de progresso e preencher com a nova percentagem
+        progressBar.clear();
+        progressBar.fillStyle(0xffffff, 1);
+        progressBar.fillRect(250, 280, 300 * value, 30);
+        progressBar.previousValue = value; //Guardar o valor anterior
+      }
     });
 
+    //Inicializar o valor anterior da barra de progresso
+    progressBar.previousValue = 0;
+
     //Texto do nome dos ficheiros
-    this.load.on("fileprogress", function (file) {
+    this.load.on("fileprogress", (file) => {
       assetText.setText("A carregar asset: " + file.key);
     });
 
     //Desaparecer quando completo
-    this.load.on("complete", function () {
+    this.load.on("complete", () => {
       progressBar.destroy();
       progressBox.destroy();
       percentText.destroy();
@@ -136,6 +145,17 @@ class PreloadScene extends Phaser.Scene {
 
   //Criação da próxima cena
   create() {
+    //Debug para website
+    const canvas = this.sys.game.canvas;
+    if (canvas === null) {
+      console.error("Canvas not initialized yet.");
+    } else {
+      const context = canvas.getContext("2d");
+      if (context) {
+        context.willReadFrequently = true;
+      }
+    }
+
     this.createAnimations();
     this.scene.start("StartScene");
   }
@@ -490,7 +510,7 @@ class OptionsSelectScene extends BaseScene {
       .text(400, 100, "Opções", this.applyFontStyle("32px"))
       .setOrigin(0.5);
 
-    // Slider para o volume da música (apenas a de níveis do jogo)
+    //Slider para o volume da música (apenas a de níveis do jogo)
     this.add
       .text(400, 190, "Música", this.applyFontStyle("24px"))
       .setOrigin(0.5);
@@ -502,7 +522,7 @@ class OptionsSelectScene extends BaseScene {
       (value) => {
         this.musicVolume = value;
         localStorage.setItem("musicVolume", value);
-        // Update only level music volumes
+        //Update only level music volumes
         ["level1-song", "level2-song", "level3-song", "level4-song"].forEach(
           (key) => {
             const music = this.sound.get(key);
@@ -514,7 +534,7 @@ class OptionsSelectScene extends BaseScene {
       }
     );
 
-    // Slider para sound effects do jogo
+    //Slider para sound effects do jogo
     this.add
       .text(400, 290, "Efeitos Sonoros", this.applyFontStyle("24px"))
       .setOrigin(0.5);
@@ -530,7 +550,7 @@ class OptionsSelectScene extends BaseScene {
       });
     });
 
-    // Slider para apenas a música ambiente
+    //Slider para apenas a música ambiente
     this.add
       .text(400, 390, "Som Ambiente", this.applyFontStyle("24px"))
       .setOrigin(0.5);
@@ -615,7 +635,7 @@ class LevelSelectScene extends BaseScene {
       .text(400, 100, "Selecionar Nível", this.applyFontStyle("32px"))
       .setOrigin(0.5);
 
-    // Load dos níveis do localstorage, ou usar o default se não existirem
+    //Load dos níveis do localstorage, ou usar o default se não existirem
     this.levels = JSON.parse(localStorage.getItem("levels")) || [
       { name: "Nível 1", unlocked: true, energyGoal: 150, x: 180, y: 460 },
       { name: "Nível 2", unlocked: false, energyGoal: 150, x: 385, y: 210 },
@@ -665,7 +685,7 @@ class GameScene extends BaseScene {
       dead: { x: 0.5, y: 0.2 },
     };
     this.lastFireballTime = 0;
-    this.fireballDelay = 500; // 0.5 seconds
+    this.fireballDelay = 500; //0.5 seconds
   }
 
   //Método de criação do jogo
@@ -736,7 +756,7 @@ class GameScene extends BaseScene {
       this
     );
 
-    // Setup do grupo de painéis solares
+    //Setup do grupo de painéis solares
     this.solarPanels = this.physics.add.group({
       allowGravity: false,
       immovable: true,
@@ -756,9 +776,9 @@ class GameScene extends BaseScene {
     this.setupAudio(level);
     this.joyStickSetup();
 
-    // Iniciar o spawn de painéis solares
+    //Iniciar o spawn de painéis solares
     this.time.addEvent({
-      delay: 8500, // 8.5 segundos
+      delay: 8500, //8.5 segundos
       callback: this.spawnSolarPanel,
       callbackScope: this,
       loop: true,
@@ -812,7 +832,7 @@ class GameScene extends BaseScene {
     this.shootSound = this.sound.add("shootSound", { volume: sfxVolume });
     this.deadSound = this.sound.add("dead", { volume: sfxVolume });
 
-    // Adicionar sons do painel solar
+    //Adicionar sons do painel solar
     this.solarAppearSound = this.sound.add("solar_appear", {
       volume: sfxVolume,
     });
@@ -823,7 +843,7 @@ class GameScene extends BaseScene {
       volume: sfxVolume,
     });
 
-    // Adicionar sons do menu de pausa
+    //Adicionar sons do menu de pausa
     this.openPauseMenuSound = this.sound.add("openPauseMenu", {
       volume: sfxVolume,
     });
@@ -928,7 +948,7 @@ class GameScene extends BaseScene {
         this.obstacleSpeed = 350;
         this.obstacleSpawnRate = 300;
         break;
-      default: // Médio
+      default: //Médio
         this.obstacleSpeed = 250;
         this.obstacleSpawnRate = 700;
     }
@@ -978,7 +998,7 @@ class GameScene extends BaseScene {
     smoke.play("smoke");
   }
 
-  // Método para spawnar painéis solares
+  //Método para spawnar painéis solares
   spawnSolarPanel() {
     if (this.isPaused) return;
 
@@ -989,7 +1009,7 @@ class GameScene extends BaseScene {
 
     this.solarAppearSound.play();
 
-    // Remover o painel solar após 4 segundos se não for apanhado
+    //Remover o painel solar após 4 segundos se não for apanhado
     this.time.delayedCall(4000, () => {
       if (solarPanel.active) {
         solarPanel.destroy();
@@ -998,7 +1018,7 @@ class GameScene extends BaseScene {
     });
   }
 
-  // Método para apanhar painéis solares
+  //Método para apanhar painéis solares
   collectSolarPanel(player, solarPanel) {
     solarPanel.destroy();
     this.solarCollectSound.play();
@@ -1016,7 +1036,7 @@ class GameScene extends BaseScene {
 
     const currentTime = this.time.now;
     if (currentTime - this.lastFireballTime < this.fireballDelay) {
-      return; // Não disparar se o delay não tiver passado
+      return; //Não disparar se o delay não tiver passado
     }
 
     //Segundo if para não poder disparar se o jogador estiver a andar
@@ -1228,7 +1248,7 @@ class GameScene extends BaseScene {
       }
     }
 
-    // Update da animação do player (do seu estado)
+    //Update da animação do player (do seu estado)
     if (
       newState !== this.playerState ||
       (newState === "idle" && !this.player.anims.isPlaying)
