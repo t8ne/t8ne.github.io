@@ -2,7 +2,12 @@
 
 This is the source code for **t8ne**'s online portfolio, designed to showcase skills, interests, and contact information interactively and dynamically. Built with `LitElement`, this site features a responsive interface, smooth transitions, and a typing animation on the homepage.
 
-## 🚀 Demo
+## 🚀 Secret
+
+The website has a secretly built-in phaser game. You can access it by going to https://t8ne.github.io/phaser
+
+## 🎲 Demo
+
 The site starts with a splash screen that fades away after loading, revealing a homepage with typing animation and smooth transitions between sections: **Home**, **About**, **Skills**, and **Contact**.
 
 ## 🎨 Features
@@ -11,7 +16,7 @@ The site starts with a splash screen that fades away after loading, revealing a 
 - **Typing Animation**: The **Home** section displays a typing effect for phrases.
 - **Smooth Transitions**: Each portfolio section (Home, About, Skills, Contact) uses a smooth transition effect when navigating.
 - **Responsive Design**: The interface adapts for mobile and desktop.
-- **Social Media Icons**: Interactive icons for GitHub, LinkedIn, Spotify, Chess.com, YouTube, and Steam in the footer.
+- **Social Media Icons**: Interactive icons for GitHub, LinkedIn, Spotify, Chess, YouTube, and Steam in the footer.
 
 ## 🛠️ Technologies Used
 
