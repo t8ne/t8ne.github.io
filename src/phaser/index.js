@@ -32,6 +32,7 @@ class PreloadScene extends Phaser.Scene {
     });
     percentText.setOrigin(0.5, 0.5);
 
+    //Texto do asset a carregar
     let assetText = this.make.text({
       x: width / 2,
       y: height / 2 + 50,
@@ -42,6 +43,17 @@ class PreloadScene extends Phaser.Scene {
       },
     });
     assetText.setOrigin(0.5, 0.5);
+
+    let asset2Text = this.make.text({
+      x: width / 2,
+      y: height / 2 + 280,
+      text: "A 1ª vez pode demorar um pouco mais...",
+      style: {
+        font: "18px PixelOperator8-Bold",
+        fill: "#ffffff",
+      },
+    });
+    asset2Text.setOrigin(0.5, 0.5);
 
     //Estilo do texto e barra
     this.load.on("progress", (value) => {
