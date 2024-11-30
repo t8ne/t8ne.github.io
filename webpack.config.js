@@ -7,9 +7,10 @@ module.exports = {
   mode: 'production',
   entry: {
     main: ['./src/bundle.min.js'],
+    phaser: ['./src/phaser/index.js']
   },
   output: {
-    filename: 'bundle.min.js',
+    filename: '[name].bundle.min.js',
     path: path.resolve(__dirname, 'src'),
     clean: true,
     publicPath: '/',
@@ -19,6 +20,12 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
       },
     ],
   },
@@ -26,10 +33,17 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/index.html'),
       filename: 'index.html',
+      chunks: ['main'],
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'src/phaser/index.html'),
+      filename: 'phaser/index.html',
+      chunks: ['phaser'],
     }),
     new CopyWebpackPlugin({
       patterns: [
         { from: path.resolve(__dirname, 'src/assets'), to: 'assets' },
+        { from: path.resolve(__dirname, 'src/phaser/assets'), to: 'phaser/assets' },
       ],
     }),
   ],

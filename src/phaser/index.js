@@ -65,65 +65,65 @@ class PreloadScene extends Phaser.Scene {
     });
 
     //Load dos backgrounds (fora do jogo)
-    this.load.image("background", "assets/world/map.png");
-    this.load.image("bgInit", "assets/world/bg.jpg");
+    this.load.image("background", "./assets/world/map.png");
+    this.load.image("bgInit", "./assets/world/bg.jpg");
 
     //Load dos backgrounds dos níveis do jogo
-    this.load.image("level1", "assets/tiles/desert_tile.png");
-    this.load.image("level2", "assets/tiles/snow_tile.png");
-    this.load.image("level3", "assets/tiles/grass_tile.png");
-    this.load.image("level4", "assets/tiles/undead_tile.png");
+    this.load.image("level1", "./assets/tiles/desert_tile.png");
+    this.load.image("level2", "./assets/tiles/snow_tile.png");
+    this.load.image("level3", "./assets/tiles/grass_tile.png");
+    this.load.image("level4", "./assets/tiles/undead_tile.png");
 
     //Load de spritesheets do character
-    this.load.spritesheet("player1", "assets/char/1.png", {
+    this.load.spritesheet("player1", "./assets/char/1.png", {
       frameWidth: 136,
       frameHeight: 170,
     });
-    this.load.spritesheet("player2", "assets/char/2.png", {
+    this.load.spritesheet("player2", "./assets/char/2.png", {
       frameWidth: 136,
       frameHeight: 170,
     });
 
     //Load dos spritesheets do ataque e do obstáculo
-    this.load.spritesheet("fireball", "assets/char/fireball.png", {
+    this.load.spritesheet("fireball", "./assets/char/fireball.png", {
       frameWidth: 121,
       frameHeight: 125,
     });
-    this.load.spritesheet("smoke", "assets/etc/smoke.png", {
+    this.load.spritesheet("smoke", "./assets/etc/smoke.png", {
       frameWidth: 426,
       frameHeight: 497,
     });
-    this.load.image("obstacle", "assets/etc/smoke.png");
+    this.load.image("obstacle", "./assets/etc/smoke.png");
 
     //Load dos aúdios do jogador/jogo
-    this.load.audio("collect", "assets/sounds/coin.wav");
-    this.load.audio("complete", "assets/sounds/power_up.wav");
-    this.load.audio("shootSound", "assets/sounds/hurt.wav");
-    this.load.audio("dead", "assets/sounds/explosion.wav");
+    this.load.audio("collect", "./assets/sounds/coin.wav");
+    this.load.audio("complete", "./assets/sounds/power_up.wav");
+    this.load.audio("shootSound", "./assets/sounds/hurt.wav");
+    this.load.audio("dead", "./assets/sounds/explosion.wav");
 
     //Load das músicas de fundo
-    this.load.audio("level1-song", "assets/music/level1.mp3");
-    this.load.audio("level2-song", "assets/music/level2.mp3");
-    this.load.audio("level3-song", "assets/music/level3.mp3");
-    this.load.audio("level4-song", "assets/music/level4.mp3");
+    this.load.audio("level1-song", "./assets/music/level1.mp3");
+    this.load.audio("level2-song", "./assets/music/level2.mp3");
+    this.load.audio("level3-song", "./assets/music/level3.mp3");
+    this.load.audio("level4-song", "./assets/music/level4.mp3");
 
     //Load dos sons do menu de pausa
-    this.load.audio("closePauseMenu", "assets/sounds/close_pausemenu.mp3");
-    this.load.audio("openPauseMenu", "assets/sounds/open_pausemenu.mp3");
+    this.load.audio("closePauseMenu", "./assets/sounds/close_pausemenu.mp3");
+    this.load.audio("openPauseMenu", "./assets/sounds/open_pausemenu.mp3");
 
     //Load dos diferentes sons do painel solar
-    this.load.audio("solar_appear", "assets/sounds/solar_appear.mp3");
-    this.load.audio("solar_disappear", "assets/sounds/solar_disappear.mp3");
-    this.load.audio("solar_collect", "assets/sounds/solar_collect.mp3");
+    this.load.audio("solar_appear", "./assets/sounds/solar_appear.mp3");
+    this.load.audio("solar_disappear", "./assets/sounds/solar_disappear.mp3");
+    this.load.audio("solar_collect", "./assets/sounds/solar_collect.mp3");
 
-    this.load.image("solar", "assets/etc/solarPanel.png");
+    this.load.image("solar", "./assets/etc/solarPanel.png");
 
-    this.load.audio("ambient", "assets/music/bgMusic.mp3");
+    this.load.audio("ambient", "./assets/music/bgMusic.mp3");
 
     //Load da Fonte utilizada
     this.loadFont(
       "PixelOperator8-Bold",
-      "assets/fonts/PixelOperator8-Bold.ttf"
+      "./assets/fonts/PixelOperator8-Bold.ttf"
     );
 
     //Load do Plugin do JoyStick
