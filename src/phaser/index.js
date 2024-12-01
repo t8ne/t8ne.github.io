@@ -272,7 +272,7 @@ class BaseScene extends Phaser.Scene {
 
   //Criação de um Back Button para voltar á StartScene
   createBackButton(scene) {
-    const { x, y } = calculatePosition(50, 550);
+    const { x, y } = calculatePosition(50, 525);
     const backButton = this.add
       .text(x, y, "Voltar", this.applyFontStyle("20px"))
       .setInteractive()
@@ -327,7 +327,7 @@ class StartScene extends BaseScene {
       )
       .setOrigin(0.5);
 
-    const { x: bottomRightX, y: bottomRightY } = calculatePosition(710, 585);
+    const { x: bottomRightX, y: bottomRightY } = calculatePosition(710, 525);
     this.add
       .text(
         bottomRightX,
@@ -356,7 +356,7 @@ class StartScene extends BaseScene {
     });
 
     //Dar reset aos níveis se o utilizador clicar no botão
-    const { x: bottomLeftX, y: bottomLeftY } = calculatePosition(110, 585);
+    const { x: bottomLeftX, y: bottomLeftY } = calculatePosition(110, 525);
     const clearDataButton = this.add
       .text(
         bottomLeftX,
@@ -837,7 +837,7 @@ class GameScene extends BaseScene {
 
     //Criar o joystick se o mesmo estiver enabled
     if (joystickState) {
-      const { x: joystickX, y: joystickY } = calculatePosition(100, 500);
+      const { x: joystickX, y: joystickY } = calculatePosition(100, 440);
       const joystickRadius =
         Math.min(game.config.width, game.config.height) * 0.08;
       this.joyStick = this.plugins.get("rexvirtualjoystickplugin").add(this, {
