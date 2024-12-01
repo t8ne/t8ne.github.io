@@ -1,4 +1,4 @@
-//@author: t8ne
+// @author: t8ne
 //--------------------------------------------------------------------------------------------
 
 //Cena de Preload: Carregar previamente os assets
@@ -15,7 +15,11 @@ class PreloadScene extends Phaser.Scene {
     let progressBar = this.add.graphics();
     let progressBox = this.add.graphics();
     progressBox.fillStyle(0x222222, 0.8);
-    progressBox.fillRect(240, 270, 320, 50);
+
+    const { x, y } = calculatePosition(240, 270);
+    const barWidth = game.config.width * 0.4;
+    const barHeight = game.config.height * 0.08;
+    progressBox.fillRect(x, y, barWidth, barHeight);
 
     let width = this.cameras.main.width;
     let height = this.cameras.main.height;
@@ -26,59 +30,56 @@ class PreloadScene extends Phaser.Scene {
       y: height / 2 - 5,
       text: "0%",
       style: {
-        font: "18px PixelOperator8-Bold",
+        font: `${calculateFontSize(18)}px PixelOperator8-Bold`,
         fill: "#ffffff",
       },
     });
     percentText.setOrigin(0.5, 0.5);
 
-    //Texto do asset a carregar
+    //Texto do asset que está a ser carregado
     let assetText = this.make.text({
       x: width / 2,
       y: height / 2 + 50,
       text: "",
       style: {
-        font: "18px PixelOperator8-Bold",
+        font: `${calculateFontSize(18)}px PixelOperator8-Bold`,
         fill: "#ffffff",
       },
     });
     assetText.setOrigin(0.5, 0.5);
 
-    let asset2Text = this.make.text({
+    //Texto adicional
+    let additionalText = this.make.text({
       x: width / 2,
       y: height / 2 + 280,
       text: "A 1ª vez pode demorar um pouco mais...",
       style: {
-        font: "18px PixelOperator8-Bold",
+        font: `${calculateFontSize(18)}px PixelOperator8-Bold`,
         fill: "#ffffff",
       },
     });
-    asset2Text.setOrigin(0.5, 0.5);
+    additionalText.setOrigin(0.5, 0.5);
 
     //Estilo do texto e barra
-    this.load.on("progress", (value) => {
+    this.load.on("progress", function (value) {
       percentText.setText(parseInt(value * 100) + "%");
-
-      //Dar apenas update quando for preciso
-      if (value > progressBar.previousValue) {
-        //Dar clear da barra de progresso e preencher com a nova percentagem
-        progressBar.clear();
-        progressBar.fillStyle(0xffffff, 1);
-        progressBar.fillRect(250, 280, 300 * value, 30);
-        progressBar.previousValue = value; //Guardar o valor anterior
-      }
+      progressBar.clear();
+      progressBar.fillStyle(0xffffff, 1);
+      progressBar.fillRect(
+        x + 10,
+        y + 10,
+        (barWidth - 20) * value,
+        barHeight - 20
+      );
     });
 
-    //Inicializar o valor anterior da barra de progresso
-    progressBar.previousValue = 0;
-
     //Texto do nome dos ficheiros
-    this.load.on("fileprogress", (file) => {
+    this.load.on("fileprogress", function (file) {
       assetText.setText("A carregar asset: " + file.key);
     });
 
     //Desaparecer quando completo
-    this.load.on("complete", () => {
+    this.load.on("complete", function () {
       progressBar.destroy();
       progressBox.destroy();
       percentText.destroy();
@@ -86,65 +87,65 @@ class PreloadScene extends Phaser.Scene {
     });
 
     //Load dos backgrounds (fora do jogo)
-    this.load.image("background", "./assets/world/map.png");
-    this.load.image("bgInit", "./assets/world/bg.jpg");
+    this.load.image("background", "assets/world/map.png");
+    this.load.image("bgInit", "assets/world/bg.jpg");
 
     //Load dos backgrounds dos níveis do jogo
-    this.load.image("level1", "./assets/tiles/desert_tile.png");
-    this.load.image("level2", "./assets/tiles/snow_tile.png");
-    this.load.image("level3", "./assets/tiles/grass_tile.png");
-    this.load.image("level4", "./assets/tiles/undead_tile.png");
+    this.load.image("level1", "assets/tiles/desert_tile.png");
+    this.load.image("level2", "assets/tiles/snow_tile.png");
+    this.load.image("level3", "assets/tiles/grass_tile.png");
+    this.load.image("level4", "assets/tiles/undead_tile.png");
 
     //Load de spritesheets do character
-    this.load.spritesheet("player1", "./assets/char/1.png", {
+    this.load.spritesheet("player1", "assets/char/1.png", {
       frameWidth: 136,
       frameHeight: 170,
     });
-    this.load.spritesheet("player2", "./assets/char/2.png", {
+    this.load.spritesheet("player2", "assets/char/2.png", {
       frameWidth: 136,
       frameHeight: 170,
     });
 
     //Load dos spritesheets do ataque e do obstáculo
-    this.load.spritesheet("fireball", "./assets/char/fireball.png", {
+    this.load.spritesheet("fireball", "assets/char/fireball.png", {
       frameWidth: 121,
       frameHeight: 125,
     });
-    this.load.spritesheet("smoke", "./assets/etc/smoke.png", {
+    this.load.spritesheet("smoke", "assets/etc/smoke.png", {
       frameWidth: 426,
       frameHeight: 497,
     });
-    this.load.image("obstacle", "./assets/etc/smoke.png");
+    this.load.image("obstacle", "assets/etc/smoke.png");
 
     //Load dos aúdios do jogador/jogo
-    this.load.audio("collect", "./assets/sounds/coin.wav");
-    this.load.audio("complete", "./assets/sounds/power_up.wav");
-    this.load.audio("shootSound", "./assets/sounds/hurt.wav");
-    this.load.audio("dead", "./assets/sounds/explosion.wav");
+    this.load.audio("collect", "assets/sounds/coin.wav");
+    this.load.audio("complete", "assets/sounds/power_up.wav");
+    this.load.audio("shootSound", "assets/sounds/hurt.wav");
+    this.load.audio("dead", "assets/sounds/explosion.wav");
 
     //Load das músicas de fundo
-    this.load.audio("level1-song", "./assets/music/level1.mp3");
-    this.load.audio("level2-song", "./assets/music/level2.mp3");
-    this.load.audio("level3-song", "./assets/music/level3.mp3");
-    this.load.audio("level4-song", "./assets/music/level4.mp3");
+    this.load.audio("level1-song", "assets/music/level1.mp3");
+    this.load.audio("level2-song", "assets/music/level2.mp3");
+    this.load.audio("level3-song", "assets/music/level3.mp3");
+    this.load.audio("level4-song", "assets/music/level4.mp3");
 
     //Load dos sons do menu de pausa
-    this.load.audio("closePauseMenu", "./assets/sounds/close_pausemenu.mp3");
-    this.load.audio("openPauseMenu", "./assets/sounds/open_pausemenu.mp3");
+    this.load.audio("closePauseMenu", "assets/sounds/close_pausemenu.mp3");
+    this.load.audio("openPauseMenu", "assets/sounds/open_pausemenu.mp3");
 
     //Load dos diferentes sons do painel solar
-    this.load.audio("solar_appear", "./assets/sounds/solar_appear.mp3");
-    this.load.audio("solar_disappear", "./assets/sounds/solar_disappear.mp3");
-    this.load.audio("solar_collect", "./assets/sounds/solar_collect.mp3");
+    this.load.audio("solar_appear", "assets/sounds/solar_appear.mp3");
+    this.load.audio("solar_disappear", "assets/sounds/solar_disappear.mp3");
+    this.load.audio("solar_collect", "assets/sounds/solar_collect.mp3");
 
-    this.load.image("solar", "./assets/etc/solarPanel.png");
+    this.load.image("solar", "assets/etc/solarPanel.png");
 
-    this.load.audio("ambient", "./assets/music/bgMusic.mp3");
+    this.load.audio("ambient", "assets/music/bgMusic.mp3");
 
     //Load da Fonte utilizada
     this.loadFont(
       "PixelOperator8-Bold",
-      "./assets/fonts/PixelOperator8-Bold.ttf"
+      "assets/fonts/PixelOperator8-Bold.ttf"
     );
 
     //Load do Plugin do JoyStick
@@ -157,17 +158,6 @@ class PreloadScene extends Phaser.Scene {
 
   //Criação da próxima cena
   create() {
-    //Debug para website
-    const canvas = this.sys.game.canvas;
-    if (canvas === null) {
-      console.error("Canvas not initialized yet.");
-    } else {
-      const context = canvas.getContext("2d");
-      if (context) {
-        context.willReadFrequently = true;
-      }
-    }
-
     this.createAnimations();
     this.scene.start("StartScene");
   }
@@ -273,13 +263,18 @@ class BaseScene extends Phaser.Scene {
 
   //Aplicar a fonte
   applyFontStyle(size = "24px", color = "#ffffff") {
-    return { fontSize: size, fill: color, fontFamily: "PixelOperator8-Bold" };
+    return {
+      fontSize: calculateFontSize(parseInt(size)),
+      fill: color,
+      fontFamily: "PixelOperator8-Bold",
+    };
   }
 
   //Criação de um Back Button para voltar á StartScene
   createBackButton(scene) {
+    const { x, y } = calculatePosition(50, 550);
     const backButton = this.add
-      .text(50, 550, "Voltar", this.applyFontStyle("20px"))
+      .text(x, y, "Voltar", this.applyFontStyle("20px"))
       .setInteractive()
       .on("pointerdown", () => this.scene.start(scene));
     return backButton;
@@ -314,20 +309,32 @@ class StartScene extends BaseScene {
     this.createBackground("bgInit", true);
 
     //Adição do texto principal da scene
+    const { x: centerX, y: topY } = calculatePosition(400, 100);
     this.add
-      .text(400, 100, "Energy Guardian Adventure", this.applyFontStyle("30px"))
+      .text(
+        centerX,
+        topY,
+        "Energy Guardian Adventure",
+        this.applyFontStyle("30px")
+      )
       .setOrigin(0.5);
     this.add
       .text(
-        400,
-        135,
+        centerX,
+        topY + 35,
         "--------------------------------",
         this.applyFontStyle("30px")
       )
       .setOrigin(0.5);
 
+    const { x: bottomRightX, y: bottomRightY } = calculatePosition(710, 585);
     this.add
-      .text(710, 585, "t8ne - 2024", this.applyFontStyle("15px"))
+      .text(
+        bottomRightX,
+        bottomRightY,
+        "t8ne - 2024",
+        this.applyFontStyle("15px")
+      )
       .setOrigin(0.5);
 
     //Botões diferentes que o user pode clicar, redirige á sua scene devida
@@ -340,16 +347,23 @@ class StartScene extends BaseScene {
     ];
 
     buttons.forEach((button, index) => {
+      const { x, y } = calculatePosition(400, 210 + index * 50);
       this.add
-        .text(400, 210 + index * 50, button.text, this.applyFontStyle())
+        .text(x, y, button.text, this.applyFontStyle())
         .setOrigin(0.5)
         .setInteractive()
         .on("pointerdown", () => this.scene.start(button.scene));
     });
 
     //Dar reset aos níveis se o utilizador clicar no botão
+    const { x: bottomLeftX, y: bottomLeftY } = calculatePosition(110, 585);
     const clearDataButton = this.add
-      .text(110, 585, "Limpar Níveis", this.applyFontStyle("15px"))
+      .text(
+        bottomLeftX,
+        bottomLeftY,
+        "Limpar Níveis",
+        this.applyFontStyle("15px")
+      )
       .setOrigin(0.5)
       .setInteractive()
       .on("pointerdown", () => {
@@ -374,34 +388,27 @@ class ObjectiveScene extends BaseScene {
 
     //Texto do objetivo do jogo
     this.createBackground("bgInit", true);
+    const { x: centerX, y: topY } = calculatePosition(400, 100);
     this.add
-      .text(400, 100, "Objetivo", this.applyFontStyle("32px"))
-      .setOrigin(0.5);
-    this.add
-      .text(400, 200, "Apanha energias renováveis", this.applyFontStyle("20px"))
-      .setOrigin(0.5);
-    this.add
-      .text(
-        400,
-        240,
-        "para restaurar o meio ambiente.",
-        this.applyFontStyle("20px")
-      )
-      .setOrigin(0.5);
-    this.add
-      .text(400, 300, "Desvia-te dos obstáculos", this.applyFontStyle("20px"))
-      .setOrigin(0.5);
-    this.add
-      .text(400, 340, "para não perder energia.", this.applyFontStyle("20px"))
-      .setOrigin(0.5);
-    this.add
-      .text(400, 400, "Completa a meta de energia", this.applyFontStyle("20px"))
-      .setOrigin(0.5);
-    this.add
-      .text(400, 440, "antes que o tempo acabe!", this.applyFontStyle("20px"))
+      .text(centerX, topY, "Objetivo", this.applyFontStyle("32px"))
       .setOrigin(0.5);
 
-    //Adição do back button, algo comum nas próximos scenes
+    const objectives = [
+      "Apanha energias renováveis",
+      "para restaurar o meio ambiente.",
+      "Desvia-te dos obstáculos",
+      "para não perder energia.",
+      "Completa a meta de energia",
+      "antes que o tempo acabe!",
+    ];
+
+    objectives.forEach((objective, index) => {
+      const { x, y } = calculatePosition(400, 200 + index * 40);
+      this.add
+        .text(x, y, objective, this.applyFontStyle("20px"))
+        .setOrigin(0.5);
+    });
+
     this.createBackButton("StartScene");
     this.playAmbientMusic();
   }
@@ -419,30 +426,28 @@ class ControlosScene extends BaseScene {
 
     //Texto dos controlos do jogo
     this.createBackground("bgInit", true);
+    const { x: centerX, y: topY } = calculatePosition(400, 100);
     this.add
-      .text(400, 100, "Controlos", this.applyFontStyle("32px"))
+      .text(centerX, topY, "Controlos", this.applyFontStyle("32px"))
       .setOrigin(0.5);
-    this.add
-      .text(400, 200, "Movimentação:", this.applyFontStyle("21px"))
-      .setOrigin(0.5);
-    this.add
-      .text(200, 260, "← - Esquerda", this.applyFontStyle("21px"))
-      .setOrigin(0.5);
-    this.add
-      .text(600, 260, "→ - Direita", this.applyFontStyle("21px"))
-      .setOrigin(0.5);
-    this.add
-      .text(200, 330, "↑ - Cima", this.applyFontStyle("21px"))
-      .setOrigin(0.5);
-    this.add
-      .text(600, 330, "↓ - Baixo.", this.applyFontStyle("21px"))
-      .setOrigin(0.5);
-    this.add
-      .text(400, 380, "Ações:", this.applyFontStyle("21px"))
-      .setOrigin(0.5);
-    this.add
-      .text(400, 440, "Click - Atacar", this.applyFontStyle("21px"))
-      .setOrigin(0.5);
+
+    const controls = [
+      { text: "Movimentação:", x: 400, y: 200 },
+      { text: "← - Esquerda", x: 200, y: 260 },
+      { text: "→ - Direita", x: 600, y: 260 },
+      { text: "↑ - Cima", x: 200, y: 330 },
+      { text: "↓ - Baixo", x: 600, y: 330 },
+      { text: "Ações:", x: 400, y: 380 },
+      { text: "Click - Atacar", x: 400, y: 440 },
+    ];
+
+    controls.forEach((control) => {
+      const { x, y } = calculatePosition(control.x, control.y);
+      this.add
+        .text(x, y, control.text, this.applyFontStyle("21px"))
+        .setOrigin(0.5);
+    });
+
     this.createBackButton("StartScene");
     this.playAmbientMusic();
   }
@@ -460,19 +465,28 @@ class DifficultySelectScene extends BaseScene {
 
     //Texto do ecrâ
     this.createBackground("bgInit", true);
+    const { x: centerX, y: topY } = calculatePosition(400, 100);
     this.add
-      .text(400, 100, "Selecionar Dificuldade", this.applyFontStyle("32px"))
+      .text(
+        centerX,
+        topY,
+        "Selecionar Dificuldade",
+        this.applyFontStyle("32px")
+      )
       .setOrigin(0.5);
 
     //Texto das Diferentes dificuldades do jogo
     const difficulties = ["Fácil", "Médio", "Difícil"];
-    this.difficulties = difficulties.map((level, index) => ({
-      name: level,
-      button: this.add
-        .text(400, 250 + index * 50, level, this.applyFontStyle())
-        .setOrigin(0.5)
-        .setInteractive(),
-    }));
+    this.difficulties = difficulties.map((level, index) => {
+      const { x, y } = calculatePosition(400, 250 + index * 50);
+      return {
+        name: level,
+        button: this.add
+          .text(x, y, level, this.applyFontStyle())
+          .setOrigin(0.5)
+          .setInteractive(),
+      };
+    });
 
     this.difficulties.forEach((difficulty) => {
       difficulty.button.on("pointerdown", () =>
@@ -522,7 +536,7 @@ class OptionsSelectScene extends BaseScene {
       .text(400, 100, "Opções", this.applyFontStyle("32px"))
       .setOrigin(0.5);
 
-    //Slider para o volume da música (apenas a de níveis do jogo)
+    // Slider para o volume da música (apenas a de níveis do jogo)
     this.add
       .text(400, 190, "Música", this.applyFontStyle("24px"))
       .setOrigin(0.5);
@@ -534,7 +548,7 @@ class OptionsSelectScene extends BaseScene {
       (value) => {
         this.musicVolume = value;
         localStorage.setItem("musicVolume", value);
-        //Update only level music volumes
+        // Update only level music volumes
         ["level1-song", "level2-song", "level3-song", "level4-song"].forEach(
           (key) => {
             const music = this.sound.get(key);
@@ -546,7 +560,7 @@ class OptionsSelectScene extends BaseScene {
       }
     );
 
-    //Slider para sound effects do jogo
+    // Slider para sound effects do jogo
     this.add
       .text(400, 290, "Efeitos Sonoros", this.applyFontStyle("24px"))
       .setOrigin(0.5);
@@ -562,7 +576,7 @@ class OptionsSelectScene extends BaseScene {
       });
     });
 
-    //Slider para apenas a música ambiente
+    // Slider para apenas a música ambiente
     this.add
       .text(400, 390, "Som Ambiente", this.applyFontStyle("24px"))
       .setOrigin(0.5);
@@ -629,6 +643,7 @@ class OptionsSelectScene extends BaseScene {
   }
 }
 
+//Ecrâ de seleção de níveis
 class LevelSelectScene extends BaseScene {
   constructor() {
     super("LevelSelectScene");
@@ -641,10 +656,11 @@ class LevelSelectScene extends BaseScene {
     //Adição do background do ecrâ, e uma tint no mesmo
     this.createBackground("background");
     const darkTint = this.add
-      .rectangle(0, 0, 800, 600, 0x000000, 0.6)
+      .rectangle(0, 0, game.config.width, game.config.height, 0x000000, 0.6)
       .setOrigin(0);
+    const { x: centerX, y: topY } = calculatePosition(400, 100);
     this.add
-      .text(400, 100, "Selecionar Nível", this.applyFontStyle("32px"))
+      .text(centerX, topY, "Selecionar Nível", this.applyFontStyle("32px"))
       .setOrigin(0.5);
 
     //Load dos níveis do localstorage, ou usar o default se não existirem
@@ -658,8 +674,9 @@ class LevelSelectScene extends BaseScene {
     //Diferentes cores se o mesmo estiver bloqueado ou não
     this.levels.forEach((level, index) => {
       const color = level.unlocked ? "#ffffff" : "#ff0000";
+      const { x, y } = calculatePosition(level.x, level.y);
       const levelButton = this.add
-        .text(level.x, level.y, level.name, this.applyFontStyle("24px", color))
+        .text(x, y, level.name, this.applyFontStyle("24px", color))
         .setOrigin(0.5);
 
       //Deixá-lo interativo se o mesmo estiver desbloqueado
@@ -675,7 +692,7 @@ class LevelSelectScene extends BaseScene {
     this.playAmbientMusic();
   }
 
-  //Começar o nível coorespondente
+  //Começar o nível correspondente
   startLevel(level, energyGoal) {
     const difficulty = this.scene.get(
       "DifficultySelectScene"
@@ -710,8 +727,13 @@ class GameScene extends BaseScene {
     this.currentLevel = level;
 
     //Setup do Background
-    const bg = this.add.image(400, 300, `level${level}`);
+    const bg = this.add.image(
+      game.config.width / 2,
+      game.config.height / 2,
+      `level${level}`
+    );
 
+    //Escala do background dependendo do nível
     if (level === 4) {
       bg.setScale(2);
     } else {
@@ -724,11 +746,13 @@ class GameScene extends BaseScene {
     bg.setScrollFactor(0);
 
     //Setup do jogador (player)
-    this.player = this.physics.add.sprite(400, 300, "player1");
+    const { x: playerX, y: playerY } = calculatePosition(400, 300);
+    this.player = this.physics.add.sprite(playerX, playerY, "player1");
     this.player.setCollideWorldBounds(true);
 
-    const playerWidth = 40;
-    const playerHeight = 120;
+    //Setup do tamanho do jogador
+    const playerWidth = 40 * (game.config.width / 800);
+    const playerHeight = 120 * (game.config.height / 600);
     this.player.body.setSize(playerWidth, playerHeight);
     this.player.body.setOffset(
       (this.player.width - playerWidth) / 2,
@@ -774,6 +798,7 @@ class GameScene extends BaseScene {
       immovable: true,
     });
 
+    //Setup do grupo de objetos
     this.physics.add.overlap(
       this.player,
       this.solarPanels,
@@ -782,6 +807,7 @@ class GameScene extends BaseScene {
       this
     );
 
+    //Resto do setup do jogo
     this.createUI(level);
     this.initGame(difficulty);
     this.setupPauseMenu();
@@ -811,12 +837,15 @@ class GameScene extends BaseScene {
 
     //Criar o joystick se o mesmo estiver enabled
     if (joystickState) {
+      const { x: joystickX, y: joystickY } = calculatePosition(100, 500);
+      const joystickRadius =
+        Math.min(game.config.width, game.config.height) * 0.08;
       this.joyStick = this.plugins.get("rexvirtualjoystickplugin").add(this, {
-        x: 100,
-        y: 500,
-        radius: 50,
-        base: this.add.circle(0, 0, 50, 0x888888),
-        thumb: this.add.circle(0, 0, 30, 0xcccccc),
+        x: joystickX,
+        y: joystickY,
+        radius: joystickRadius,
+        base: this.add.circle(0, 0, joystickRadius, 0x888888),
+        thumb: this.add.circle(0, 0, joystickRadius * 0.6, 0xcccccc),
       });
 
       //Criar as keys do joystick
@@ -866,11 +895,28 @@ class GameScene extends BaseScene {
 
   //Menu de pausa
   setupPauseMenu() {
-    this.pauseMenu = this.add.container(400, 300);
-    this.pauseMenu.add(this.add.rectangle(0, 0, 800, 600, 0x000000, 1));
+    this.pauseMenu = this.add.container(
+      game.config.width / 2,
+      game.config.height / 2
+    );
+    this.pauseMenu.add(
+      this.add.rectangle(
+        0,
+        0,
+        game.config.width,
+        game.config.height,
+        0x000000,
+        1
+      )
+    );
     this.pauseMenu.add(
       this.add
-        .text(0, -70, "PAUSADO", this.applyFontStyle("32px"))
+        .text(
+          0,
+          -game.config.height * 0.12,
+          "PAUSADO",
+          this.applyFontStyle("32px")
+        )
         .setOrigin(0.5)
     );
     this.pauseMenu.add(
@@ -880,7 +926,12 @@ class GameScene extends BaseScene {
     );
     this.pauseMenu.add(
       this.add
-        .text(0, 60, "S - Sair", this.applyFontStyle("24px"))
+        .text(
+          0,
+          game.config.height * 0.1,
+          "S - Sair",
+          this.applyFontStyle("24px")
+        )
         .setOrigin(0.5)
     );
     this.pauseMenu.setDepth(1000);
@@ -927,17 +978,17 @@ class GameScene extends BaseScene {
       fillColor = "#000000";
     }
 
-    const fontStyle = {
-      fontSize: "24px",
-      fill: fillColor,
-      fontFamily: "PixelOperator8-Bold",
-    };
-    this.scoreText = this.add.text(16, 16, "Pontuação: 0", fontStyle);
-    this.livesText = this.add.text(16, 50, "Vidas: 3", fontStyle);
-    this.timeText = this.add.text(580, 16, "Tempo: 60", fontStyle);
+    const fontStyle = this.applyFontStyle("24px", fillColor);
+    const { x: scoreX, y: scoreY } = calculatePosition(16, 16);
+    this.scoreText = this.add.text(scoreX, scoreY, "Pontuação: 0", fontStyle);
+    const { x: livesX, y: livesY } = calculatePosition(16, 50);
+    this.livesText = this.add.text(livesX, livesY, "Vidas: 3", fontStyle);
+    const { x: timeX, y: timeY } = calculatePosition(580, 16);
+    this.timeText = this.add.text(timeX, timeY, "Tempo: 60", fontStyle);
+    const { x: pauseX, y: pauseY } = calculatePosition(16, 574);
     this.add.text(
-      16,
-      574,
+      pauseX,
+      pauseY,
       "ESC para Pausar",
       this.applyFontStyle("15px", fillColor)
     );
@@ -953,15 +1004,15 @@ class GameScene extends BaseScene {
   initGame(difficulty) {
     switch (difficulty) {
       case "Fácil":
-        this.obstacleSpeed = 200;
+        this.obstacleSpeed = game.config.width * 0.25;
         this.obstacleSpawnRate = 1000;
         break;
       case "Difícil":
-        this.obstacleSpeed = 350;
+        this.obstacleSpeed = game.config.width * 0.4375;
         this.obstacleSpawnRate = 300;
         break;
       default: //Médio
-        this.obstacleSpeed = 250;
+        this.obstacleSpeed = game.config.width * 0.3125;
         this.obstacleSpawnRate = 700;
     }
 
@@ -989,15 +1040,15 @@ class GameScene extends BaseScene {
 
     //Criaão do Obstáculo
     const smoke = this.obstacles.create(
-      800,
-      Phaser.Math.Between(100, 500),
+      game.config.width,
+      Phaser.Math.Between(game.config.height * 0.17, game.config.height * 0.83),
       "smoke"
     );
-    smoke.setScale(0.2);
+    smoke.setScale(0.2 * (game.config.width / 800));
 
     //Hitbox do mesmo
-    const smokeWidth = 60;
-    const smokeHeight = 70;
+    const smokeWidth = 60 * (game.config.width / 800);
+    const smokeHeight = 70 * (game.config.height / 600);
     smoke.body.setSize(smokeWidth, smokeHeight);
     smoke.body.setOffset(
       (smoke.width * smoke.scale - smokeWidth) / 2,
@@ -1014,10 +1065,16 @@ class GameScene extends BaseScene {
   spawnSolarPanel() {
     if (this.isPaused) return;
 
-    const x = Phaser.Math.Between(100, 700);
-    const y = Phaser.Math.Between(100, 500);
+    const x = Phaser.Math.Between(
+      game.config.width * 0.125,
+      game.config.width * 0.875
+    );
+    const y = Phaser.Math.Between(
+      game.config.height * 0.167,
+      game.config.height * 0.833
+    );
     const solarPanel = this.solarPanels.create(x, y, "solar");
-    solarPanel.setScale(1.2);
+    solarPanel.setScale(1.2 * (game.config.width / 800));
 
     this.solarAppearSound.play();
 
@@ -1063,10 +1120,15 @@ class GameScene extends BaseScene {
 
       const fireball = this.physics.add
         .sprite(this.player.x, this.player.y, "fireball")
-        .setScale(0.5);
+        .setScale(0.5 * (game.config.width / 800));
       fireball.setRotation(angle);
       fireball.play("fireball");
-      this.physics.moveTo(fireball, pointer.x, pointer.y, 600);
+      this.physics.moveTo(
+        fireball,
+        pointer.x,
+        pointer.y,
+        game.config.width * 0.75
+      );
 
       //Se houver colisão entre fireball e obstáculo, ambos desaparecem
       this.physics.add.collider(fireball, this.obstacles, (f, obstacle) => {
@@ -1104,10 +1166,11 @@ class GameScene extends BaseScene {
 
   //Update da progress bar a cada obstáculo destruído
   updateProgressBar() {
-    const progress = (this.energy / this.energyGoal) * 600;
+    const progress = (this.energy / this.energyGoal) * game.config.width * 0.75;
     this.progressBar.clear();
     this.progressBar.fillStyle(0x00ff00, 1);
-    this.progressBar.fillRect(100, 550, progress, 20);
+    const { x, y } = calculatePosition(100, 550);
+    this.progressBar.fillRect(x, y, progress, game.config.height * 0.033);
   }
 
   //Update do timer, se não estiver com o jogo em pausa
@@ -1196,7 +1259,7 @@ class GameScene extends BaseScene {
       return;
     }
 
-    const speed = 160;
+    const speed = game.config.width * 0.2;
     let newState = "idle";
     this.isMoving = false;
 
@@ -1293,11 +1356,19 @@ class LevelCompleteScene extends BaseScene {
 
     //Texto do ecrâ
     this.createBackground("bgInit", true);
+    const { x: centerX, y: topY } = calculatePosition(400, 100);
     this.add
-      .text(400, 100, "Nível Concluído!", this.applyFontStyle("32px"))
+      .text(centerX, topY, "Nível Concluído!", this.applyFontStyle("32px"))
       .setOrigin(0.5);
+
+    const { x: scoreX, y: scoreY } = calculatePosition(400, 200);
     this.add
-      .text(400, 200, `Pontuação: ${data.score}`, this.applyFontStyle("24px"))
+      .text(
+        scoreX,
+        scoreY,
+        `Pontuação: ${data.score}`,
+        this.applyFontStyle("24px")
+      )
       .setOrigin(0.5);
 
     //Etcs dependendo do nível
@@ -1316,8 +1387,9 @@ class LevelCompleteScene extends BaseScene {
 
     //No nível 4 não pode dar mais unlock a nada
     if (data.level < 4) {
+      const { x: nextLevelX, y: nextLevelY } = calculatePosition(400, 300);
       const nextLevelButton = this.add
-        .text(400, 300, "Próximo Nível", this.applyFontStyle())
+        .text(nextLevelX, nextLevelY, "Próximo Nível", this.applyFontStyle())
         .setOrigin(0.5)
         .setInteractive();
       nextLevelButton.on("pointerdown", () => {
@@ -1333,10 +1405,11 @@ class LevelCompleteScene extends BaseScene {
 
     //Texto custom para o fim do jogo
     if (data.level === 4) {
+      const { x: congratsX, y: congratsY } = calculatePosition(400, 300);
       this.add
         .text(
-          400,
-          300,
+          congratsX,
+          congratsY,
           "Parabéns! Concluíste o Jogo!",
           this.applyFontStyle("24px")
         )
@@ -1344,8 +1417,9 @@ class LevelCompleteScene extends BaseScene {
     }
 
     //Botão para voltar para a escolha de níveis
+    const { x: backX, y: backY } = calculatePosition(400, 350);
     const backtoLevelsButton = this.add
-      .text(400, 350, "Seleção de Níveis", this.applyFontStyle())
+      .text(backX, backY, "Seleção de Níveis", this.applyFontStyle())
       .setOrigin(0.5)
       .setInteractive();
     backtoLevelsButton.on("pointerdown", () =>
@@ -1369,16 +1443,25 @@ class GameOverScene extends BaseScene {
 
     //Texto do ecrâ
     this.createBackground("bgInit", true);
+    const { x: centerX, y: topY } = calculatePosition(400, 100);
     this.add
-      .text(400, 100, "Game Over!", this.applyFontStyle("32px"))
+      .text(centerX, topY, "Game Over!", this.applyFontStyle("32px"))
       .setOrigin(0.5);
+
+    const { x: scoreX, y: scoreY } = calculatePosition(400, 200);
     this.add
-      .text(400, 200, `Pontuação: ${data.score}`, this.applyFontStyle("24px"))
+      .text(
+        scoreX,
+        scoreY,
+        `Pontuação: ${data.score}`,
+        this.applyFontStyle("24px")
+      )
       .setOrigin(0.5);
 
     //Botão de restart o nível que acabou de jogar
+    const { x: restartX, y: restartY } = calculatePosition(400, 300);
     const restartButton = this.add
-      .text(400, 300, "Reiniciar", this.applyFontStyle())
+      .text(restartX, restartY, "Reiniciar", this.applyFontStyle())
       .setOrigin(0.5)
       .setInteractive();
     restartButton.on("pointerdown", () => {
@@ -1391,8 +1474,9 @@ class GameOverScene extends BaseScene {
     });
 
     //Botão para voltar para a escolha de níveis
+    const { x: backX, y: backY } = calculatePosition(400, 350);
     const backtoLevelsButton = this.add
-      .text(400, 350, "Seleção de Níveis", this.applyFontStyle())
+      .text(backX, backY, "Seleção de Níveis", this.applyFontStyle())
       .setOrigin(0.5)
       .setInteractive();
     backtoLevelsButton.on("pointerdown", () =>
@@ -1404,13 +1488,28 @@ class GameOverScene extends BaseScene {
   }
 }
 
-//Configuração dos níveis, da janela do jogo, físicas e etcs
+// Configuração dos níveis, da janela do jogo, físicas e etcs
 const config = {
   type: Phaser.AUTO,
   width: 800,
   height: 600,
   parent: "game-container",
   backgroundColor: "#1d1d1d",
+  scale: {
+    mode: Phaser.Scale.RESIZE,
+    parent: "game-container",
+    width: 800,
+    height: 600,
+    min: {
+      width: 300,
+      height: 225,
+    },
+    max: {
+      width: 800,
+      height: 600,
+    },
+    autoRound: true,
+  },
   scene: [
     PreloadScene,
     StartScene,
@@ -1434,3 +1533,87 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+
+// Função auxiliar para calcular o tamanho da fonte responsiva
+function calculateFontSize(baseSize) {
+  // Obter o tamanho real do canvas
+  const canvas = game.canvas;
+  const scaleFactor = Math.min(canvas.width / 800, canvas.height / 600);
+  return Math.floor(baseSize * scaleFactor);
+}
+
+// Função auxiliar para calcular as posições responsivas
+function calculatePosition(x, y) {
+  const canvas = game.canvas;
+  const scaleX = canvas.width / 800;
+  const scaleY = canvas.height / 600;
+  return {
+    x: x * scaleX,
+    y: y * scaleY,
+  };
+}
+
+// Função para atualizar o tamanho do jogo
+function updateGameSize() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const aspectRatio = 800 / 600;
+
+  let newWidth, newHeight;
+
+  if (width / height > aspectRatio) {
+    newHeight = height;
+    newWidth = height * aspectRatio;
+  } else {
+    newWidth = width;
+    newHeight = width / aspectRatio;
+  }
+
+  game.scale.resize(newWidth, newHeight);
+
+  // Atualizar posições e tamanhos de fonte em todas as cenas ativas
+  game.scene.scenes.forEach((scene) => {
+    if (scene.sys.settings.active) {
+      scene.children.list.forEach((child) => {
+        if (child.type === "Text") {
+          const originalFontSize = parseInt(child.style.fontSize);
+          child.setFontSize(calculateFontSize(originalFontSize));
+        }
+        const { x, y } = calculatePosition(child.x, child.y);
+        child.setPosition(x, y);
+      });
+    }
+  });
+}
+
+// Adicionar listener para mudanças de orientação
+window.addEventListener("orientationchange", () => {
+  // Pequeno atraso para garantir que as dimensões da janela foram atualizadas
+  setTimeout(updateGameSize, 100);
+});
+
+// Adicionar listener para redimensionamento da janela
+window.addEventListener("resize", updateGameSize);
+
+// Chamar updateGameSize inicialmente para configurar o tamanho correto
+updateGameSize();
+
+// Adicionar CSS para garantir que o contêiner do jogo seja responsivo
+const style = document.createElement("style");
+style.textContent = `
+  #game-container {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  canvas {
+    max-width: 100%;
+    max-height: 100vh;
+    object-fit: contain;
+  }
+`;
+document.head.appendChild(style);
