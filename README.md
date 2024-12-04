@@ -4,7 +4,7 @@ This is the source code for **t8ne**'s online portfolio, designed to showcase sk
 
 ## 🚀 2 Secrets
 
-The website has 2 secretly built-in games. Find them at à̴͙̘̂̈́̽̓̕w̶͎̖̝͕̤͉̒̓̀̂͋̚͜e̴͚͙̲͖̩̰̓͗n̷̫͉̏̚ͅk̷̢̨̹͉̲͔̦͒̽̍́̀ō̸̖͕̤̪͍̗̄̑̂͋ą̴̢͍̉j̸̰̾͌b̴̡̙͋̐̿͋̊̑̓w̸̻̟̞̅͒́͂̕.
+The website has 2 secretly built-in games. Find them at à̴͙̘̂̈́̽̓̕w̶͎̖̝͕̤͉̒̓̀̂͋̚͜e̴͚͙̲͖̩̰̓͗n̷̫͉̏̚ͅk̷̢̨̹͉̲͔̦͒̽̍́̀ō̸̖͕̤̪͍̗̄̑̂͋ą̴̢͍̉j̸̰̾͌b̴̡̙͋̐̿͋̊̑̓w̸̻̟̞̅͒́͂̕?
 
 ## 🎲 Demo
 

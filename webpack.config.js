@@ -1,19 +1,21 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+
+//For building bundle: npx webpack --config webpack.config.js
+//For working on bundle: prettier --write src/bundle.min.js
 
 module.exports = {
-  mode: 'production',
+  mode: "production",
   entry: {
-    main: ['./src/bundle.min.js'],
-    phaser: ['./src/phaser/index.js']
+    main: ["./src/bundle.min.js"],
   },
   output: {
-    filename: '[name].bundle.min.js',
-    path: path.resolve(__dirname, 'src'),
+    filename: "bundle.min.js",
+    path: path.resolve(__dirname, "src"),
     clean: true,
-    publicPath: '/',
+    publicPath: "/",
   },
   module: {
     rules: [
@@ -21,30 +23,25 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-env']
-          }
-        }
+            presets: ["@babel/preset-env"],
+          },
+        },
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'src/index.html'),
-      filename: 'index.html',
-      chunks: ['main'],
-    }),
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'src/phaser/index.html'),
-      filename: 'phaser/index.html',
-      chunks: ['phaser'],
+      template: path.resolve(__dirname, "src/index.html"),
+      filename: "index.html",
+      chunks: ["main"],
     }),
     new CopyWebpackPlugin({
-      patterns: [
-        { from: path.resolve(__dirname, 'src/assets'), to: 'assets' },
-        { from: path.resolve(__dirname, 'src/phaser/assets'), to: 'phaser/assets' },
-      ],
+      patterns: [{ from: path.resolve(__dirname, "src/assets"), to: "assets" }],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: path.resolve(__dirname, "src/previous"), to: "previous" }],
     }),
   ],
   optimization: {
@@ -64,5 +61,5 @@ module.exports = {
       }),
     ],
   },
-  devtool: 'source-map',
+  devtool: "source-map",
 };
