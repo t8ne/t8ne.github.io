@@ -2,9 +2,9 @@
 
 This is the source code for **t8ne**'s online portfolio, designed to showcase skills, interests, and contact information interactively and dynamically. Built with `LitElement`, this site features a responsive interface, smooth transitions, and a typing animation on the homepage.
 
-## 🚀 Secret
+## 🚀 2 Secrets
 
-The website has a secretly built-in phaser game. You can access it by going to https://t8ne.github.io/phaser
+The website has 2 secretly built-in games. Find them at à̴͙̘̂̈́̽̓̕w̶͎̖̝͕̤͉̒̓̀̂͋̚͜e̴͚͙̲͖̩̰̓͗n̷̫͉̏̚ͅk̷̢̨̹͉̲͔̦͒̽̍́̀ō̸̖͕̤̪͍̗̄̑̂͋ą̴̢͍̉j̸̰̾͌b̴̡̙͋̐̿͋̊̑̓w̸̻̟̞̅͒́͂̕.
 
 ## 🎲 Demo
 
