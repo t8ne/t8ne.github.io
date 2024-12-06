@@ -1,4 +1,4 @@
-// !IMPORTANT: ESTE FICHEIRO TÁ BUGADO E ELIMINA TUDO O QUE ESTÁ DENTRO DA PASTA SRC
+// !IMPORTANT: Não dá actually debundle, apenas copia o bundle.min.js para outra pasta
 
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -15,7 +15,7 @@ module.exports = {
       patterns: [
         {
           from: path.resolve(__dirname, "src/bundle.min.js"),
-          to: path.resolve(__dirname, "src/.js"),
+          to: path.resolve(__dirname, "debundle/index.js"),
         },
       ],
     }),
