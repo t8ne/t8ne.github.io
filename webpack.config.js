@@ -10,10 +10,14 @@ module.exports = {
   mode: "production",
   entry: {
     main: ["./src/bundle.min.js"],
-    notFound: ["lit", "./src/404.js"],
+    notFound: ["./src/404.bundle.min.js"],
   },
   output: {
-    filename: "bundle.min.js",
+    filename: (pathData) => {
+      return pathData.chunk.name === "main"
+        ? "bundle.min.js"
+        : "404.bundle.min.js";
+    },
     path: path.resolve(__dirname, "src"),
     clean: true,
     publicPath: "/",
@@ -35,7 +39,7 @@ module.exports = {
   resolve: {
     extensions: [".js"],
     alias: {
-      lit: path.resolve(__dirname, "node_modules/@lit"),
+      lit: path.resolve(__dirname, "node_modules/lit"),
     },
   },
   plugins: [
