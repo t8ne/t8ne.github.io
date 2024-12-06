@@ -10,6 +10,7 @@ module.exports = {
   mode: "production",
   entry: {
     main: ["./src/bundle.min.js"],
+    notFound: ["lit", "./src/404.js"],
   },
   output: {
     filename: "bundle.min.js",
@@ -31,17 +32,30 @@ module.exports = {
       },
     ],
   },
+  resolve: {
+    extensions: [".js"],
+    alias: {
+      lit: path.resolve(__dirname, "node_modules/@lit"),
+    },
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src/index.html"),
       filename: "index.html",
       chunks: ["main"],
     }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, "src/404.html"),
+      filename: "404.html",
+      chunks: ["notFound"],
+    }),
     new CopyWebpackPlugin({
       patterns: [{ from: path.resolve(__dirname, "src/assets"), to: "assets" }],
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: path.resolve(__dirname, "src/previous"), to: "previous" }],
+      patterns: [
+        { from: path.resolve(__dirname, "src/previous"), to: "previous" },
+      ],
     }),
   ],
   optimization: {
