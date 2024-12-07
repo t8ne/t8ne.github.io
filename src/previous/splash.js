@@ -1,7 +1,4 @@
-import { html, css, LitElement } from 'lit';
-
-class SplashElement extends LitElement {
-  static styles = css`
+import{html as t,css as e,LitElement as i}from"lit";class s extends i{static styles=e`
     :host {
       display: flex;
       justify-content: center;
@@ -39,21 +36,6 @@ class SplashElement extends LitElement {
     :host(.fade-out) {
       opacity: 0;
     }
-  `;
-
-  render() {
-    return html`
+  `;render(){return t`
       <img src="assets/signature/t8ne.png" alt="Splash Logo" @click=${this._handleClick}>
-    `;
-  }
-
-  _handleClick() {
-    this.classList.add('fade-out');
-    setTimeout(() => {
-      this.remove();
-      document.dispatchEvent(new CustomEvent('splashScreenRemoved'));
-    }, 1000);
-  }
-}
-
-customElements.define('splash-element', SplashElement);
+    `}_handleClick(){this.classList.add("fade-out"),setTimeout((()=>{this.remove(),document.dispatchEvent(new CustomEvent("splashScreenRemoved"))}),1e3)}}customElements.define("splash-element",s);

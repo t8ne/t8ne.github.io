@@ -1,7 +1,4 @@
-import { html, css, LitElement } from "lit";
-
-class NotFoundPage extends LitElement {
-  static styles = css`
+import{html as e,css as t,LitElement as a}from"lit";class n extends a{static styles=t`
     /* Reset default margins and padding */
     * {
       margin: 0;
@@ -101,11 +98,7 @@ class NotFoundPage extends LitElement {
       height: 100%;
       object-fit: contain;
     }
-  `;
-
-  // Rest of your code remains the same
-  render() {
-    return html`
+  `;render(){return e`
       <header>
         <nav>
           <a href="https://t8ne.github.io">Home</a>
@@ -141,8 +134,4 @@ class NotFoundPage extends LitElement {
           ><img src="assets/footer/steam.png" alt="Steam"
         /></a>
       </footer>
-    `;
-  }
-}
-
-customElements.define("not-found-page", NotFoundPage);
+    `}}customElements.define("not-found-page",n);

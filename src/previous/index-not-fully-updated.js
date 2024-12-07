@@ -1,33 +1,4 @@
-import { html, css, LitElement } from 'lit';
-
-class T8neElement extends LitElement {
-  static properties = {
-    currentPhrase: { type: String },
-    activeSection: { type: String },
-    isTransitioning: { type: Boolean }
-  };
-
-  constructor() {
-    super();
-    this.phrases = ["Hi, I'm t8ne", "Web Developer", "Music Enthusiast", "Calisthenics Enjoyer"];
-    this.currentPhrase = "";
-    this.isDeleting = false;
-    this.index = 0;
-    this.speed = 100;
-    this.typingStarted = false;
-    this.activeSection = 'home';
-    this.isTransitioning = false;
-    this.isIdle = false;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    document.addEventListener('splashScreenRemoved', () => {
-      this.startTyping();
-    });
-  }
-
-  static styles = css`
+import{html as i,css as e,LitElement as t}from"lit";class n extends t{static properties={currentPhrase:{type:String},activeSection:{type:String},isTransitioning:{type:Boolean}};constructor(){super(),this.phrases=["Hi, I'm t8ne","Web Developer","Music Enthusiast","Calisthenics Enjoyer"],this.currentPhrase="",this.isDeleting=!1,this.index=0,this.speed=100,this.typingStarted=!1,this.activeSection="home",this.isTransitioning=!1,this.isIdle=!1}connectedCallback(){super.connectedCallback(),document.addEventListener("splashScreenRemoved",(()=>{this.startTyping()}))}static styles=e`
 
     body, .content {
       overflow-x: hidden;
@@ -190,144 +161,36 @@ class T8neElement extends LitElement {
         font-size: 0.6rem;
       }
     }
-  `;
-
-  startTyping() {
-    if (!this.typingStarted) {
-      this.typingStarted = true;
-      this.typing();
-    }
-  }
-
-  typing() {
-    if (this.activeSection !== 'home') return;
-  
-    const fullText = this.phrases[this.index % this.phrases.length];
-  
-    if (this.isDeleting) {
-      this.currentPhrase = fullText.substring(0, this.currentPhrase.length - 1);
-      this.speed = 50;
-      this.isIdle = false;
-    } else {
-      this.currentPhrase = fullText.substring(0, this.currentPhrase.length + 1);
-      this.speed = 100;
-      this.isIdle = false;
-    }
-  
-    if (!this.isDeleting && this.currentPhrase === fullText) {
-      this.speed = 2000;
-      this.isDeleting = true;
-      this.isIdle = true; // Só fica idle quando o texto está completo
-    } else if (this.isDeleting && this.currentPhrase === "") {
-      this.isDeleting = false;
-      this.index++;
-      this.speed = 500;
-      this.isIdle = false;
-    }
-  
-    this.requestUpdate();
-    setTimeout(() => this.typing(), this.speed);
-  }
-  
-
-  changeSection(section) {
-    if (this.activeSection !== section) {
-      this.isTransitioning = true;
-      setTimeout(() => {
-        this.activeSection = section;
-        this.isTransitioning = false;
-        if (section === 'home') {
-          this.typing();
-        }
-      }, 500);
-    }
-  }
-
-  renderContent() {
-    switch (this.activeSection) {
-      case 'home':
-        return html`
+  `;startTyping(){this.typingStarted||(this.typingStarted=!0,this.typing())}typing(){if("home"!==this.activeSection)return;const i=this.phrases[this.index%this.phrases.length];this.isDeleting?(this.currentPhrase=i.substring(0,this.currentPhrase.length-1),this.speed=50,this.isIdle=!1):(this.currentPhrase=i.substring(0,this.currentPhrase.length+1),this.speed=100,this.isIdle=!1),this.isDeleting||this.currentPhrase!==i?this.isDeleting&&""===this.currentPhrase&&(this.isDeleting=!1,this.index++,this.speed=500,this.isIdle=!1):(this.speed=2e3,this.isDeleting=!0,this.isIdle=!0),this.requestUpdate(),setTimeout((()=>this.typing()),this.speed)}changeSection(i){this.activeSection!==i&&(this.isTransitioning=!0,setTimeout((()=>{this.activeSection=i,this.isTransitioning=!1,"home"===i&&this.typing()}),500))}renderContent(){switch(this.activeSection){case"home":return i`
           ${this.currentPhrase}
-          <span class="cursor ${this.isIdle ? '' : 'cursor-static'}"></span>
-        `;
-      case 'about':
-        return html`
+          <span class="cursor ${this.isIdle?"":"cursor-static"}"></span>
+        `;case"about":return i`
           <div class="about-content">
             Tone is a 20-year-old third-year university student pursuing a Bachelor's degree in Graphic Computing and Multimedia. With a solid foundation in programming languages like Java and expertise in web development using HTML, CSS, and JavaScript, Tone is committed to harnessing technical and creative skills in projects that blend engineering precision with visual storytelling. Passionate about innovation in multimedia technology, Tone is keen on developing applications and websites that push the boundaries of user experience.
           </div>
-        `;
-      case 'skills':
-        return html`
+        `;case"skills":return i`
           <div class="skills-grid">
             ${this.renderSkills()}
           </div>
-        `;
-      case 'contact':
-        return html`
+        `;case"contact":return i`
           <div class="contact-content">
             <div>Discord - @t8n3</div>
             <div>t8n333@gmail.com</div>
           </div>
-        `;
-      default:
-        return '';
-    }
-  }
-
-  renderSkills() {
-    const skills = [
-      { name: 'CSS3', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg' },
-      { name: 'HTML5', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg' },
-      { name: 'Bootstrap', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg' },
-      { name: 'JavaScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
-      { name: 'TypeScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
-      { name: 'C#', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg' },
-      { name: 'Java', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
-      { name: 'PHP', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg' },
-      { name: 'JSON', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/json/json-original.svg' },
-      { name: 'MySQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
-      { name: 'Ruby', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg' },
-      { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
-      { name: 'Node.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
-      { name: 'Bun', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bun/bun-original.svg' },
-      { name: 'Angular', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg' },
-      { name: 'Firebase', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-original.svg' },
-      { name: 'PostgreSQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
-      { name: 'Docker', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
-      { name: 'Ionic', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ionic/ionic-original.svg' },
-      { name: 'Yii', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/yii/yii-original.svg' },
-      { name: 'After Effects', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/aftereffects/aftereffects-original.svg' },
-      { name: 'Illustrator', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg' },
-      { name: 'Photoshop', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-original.svg' },
-      { name: 'Premiere Pro', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/premierepro/premierepro-original.svg' },
-      { name: 'Blender', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg' },
-      { name: 'Maya', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/maya/maya-original.svg' },
-      { name: 'VS Code', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg' },
-      { name: 'Android Studio', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/androidstudio/androidstudio-original.svg' },
-      { name: 'Figma', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg' },
-      { name: 'IntelliJ', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg' },
-      { name: 'Fedora', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fedora/fedora-original.svg' },
-      { name: 'Ruby on Rails', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rails/rails-original-wordmark.svg' },
-    ];
-
-    return skills.map(skill => html`
+        `;default:return""}}renderSkills(){return[{name:"CSS3",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"},{name:"HTML5",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"},{name:"Bootstrap",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg"},{name:"JavaScript",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"},{name:"TypeScript",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"},{name:"C#",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg"},{name:"Java",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"},{name:"PHP",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg"},{name:"JSON",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/json/json-original.svg"},{name:"MySQL",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"},{name:"Ruby",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg"},{name:"Git",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"},{name:"Node.js",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"},{name:"Bun",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bun/bun-original.svg"},{name:"Angular",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg"},{name:"Firebase",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-original.svg"},{name:"PostgreSQL",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"},{name:"Docker",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"},{name:"Ionic",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ionic/ionic-original.svg"},{name:"Yii",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/yii/yii-original.svg"},{name:"After Effects",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/aftereffects/aftereffects-original.svg"},{name:"Illustrator",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg"},{name:"Photoshop",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-original.svg"},{name:"Premiere Pro",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/premierepro/premierepro-original.svg"},{name:"Blender",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg"},{name:"Maya",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/maya/maya-original.svg"},{name:"VS Code",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg"},{name:"Android Studio",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/androidstudio/androidstudio-original.svg"},{name:"Figma",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg"},{name:"IntelliJ",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg"},{name:"Fedora",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fedora/fedora-original.svg"},{name:"Ruby on Rails",logo:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rails/rails-original-wordmark.svg"}].map((e=>i`
       <div class="skill-item">
-        <img src="${skill.logo}" alt="${skill.name} logo" />
-        <span class="skill-name">${skill.name}</span>
+        <img src="${e.logo}" alt="${e.name} logo" />
+        <span class="skill-name">${e.name}</span>
       </div>
-    `);
-  }
-
-  render() {
-    return html`
+    `))}render(){return i`
       <header>
         <nav>
-          ${['Home', 'About', 'Skills', 'Contact'].map(item => html`
-            <a href="#" @click=${() => this.changeSection(item.toLowerCase())}>${item}</a>
-          `)}
+          ${["Home","About","Skills","Contact"].map((e=>i`
+            <a href="#" @click=${()=>this.changeSection(e.toLowerCase())}>${e}</a>
+          `))}
         </nav>
       </header>
-      <div class="content ${this.isTransitioning ? 'transitioning' : ''}">
+      <div class="content ${this.isTransitioning?"transitioning":""}">
         ${this.renderContent()}
       </div>
       <footer>
@@ -338,8 +201,4 @@ class T8neElement extends LitElement {
         <a class="app-icon" href="http://youtube.com/@t8n3" target="_blank"><img src="assets/footer/youtube.png" alt="YouTube" width="20" height="20"></a>
         <a class="app-icon" href="https://steamcommunity.com/id/t8ne" target="_blank"><img src="assets/footer/steam.png" alt="Steam" width="20" height="20"></a>
       </footer>
-    `;
-  }
-}
-
-customElements.define('t8ne-element', T8neElement);
+    `}}customElements.define("t8ne-element",n);
