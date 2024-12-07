@@ -1,4 +1,4 @@
-import{html as e,css as t,LitElement as a}from"lit";class n extends a{static styles=t`
+import{html as t,css as e,LitElement as a}from"lit";class n extends a{static styles=e`
     /* Reset default margins and padding */
     * {
       margin: 0;
@@ -98,7 +98,7 @@ import{html as e,css as t,LitElement as a}from"lit";class n extends a{static sty
       height: 100%;
       object-fit: contain;
     }
-  `;render(){return e`
+  `;render(){return t`
       <header>
         <nav>
           <a href="https://t8ne.github.io">Home</a>
